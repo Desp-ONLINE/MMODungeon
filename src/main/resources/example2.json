@@ -1,0 +1,53 @@
+{
+  "id": 0,
+  "type": "RAID",
+  "name": "예제 레이드",
+  "enable": true,
+  "replayDay": 1,
+  "onlySingle": false,
+  "life": 3,
+  "reqLevel": 1,
+  "minPlayer": 1,
+  "maxPlayer": 2,
+  "time": 10,
+  "rewardTime": 15,
+  "maxJoin": 2,
+
+  "spawners": [
+    {
+      "mobId": "SkeletalKnight",
+      "amount": 2,
+      "location": "world:empty, x:106.5, y:50, z:-809, yaw: -107, pitch: 3.1"
+    },
+    {
+      "mobId": "SkeletonKing",
+      "amount": 2,
+      "location": "world:empty, x:106.5, y:50, z:-813, yaw: -107, pitch: 3.1"
+    }
+  ],
+  "conditions": [
+    {
+      "mobId": "SkeletalKnight",
+      "amount": 1
+    },
+    {
+      "mobId": "SkeletonKing",
+      "amount": 1
+    }
+  ],
+
+  "rewardBlock": "chest",
+  "reward": {
+    "exp": 1000,
+    "gold": 1000,
+    "items": "rO0ABXcEAAAABnNyABpvcmcuYnVra2l0LnV0aWwuaW8uV3JhcHBlcvJQR+zxEm8FAgABTAADbWFw\r\ndAAPTGphdmEvdXRpbC9NYXA7eHBzcgA1Y29tLmdvb2dsZS5jb21tb24uY29sbGVjdC5JbW11dGFi\r\nbGVNYXAkU2VyaWFsaXplZEZvcm0AAAAAAAAAAAIAAkwABGtleXN0ABJMamF2YS9sYW5nL09iamVj\r\ndDtMAAZ2YWx1ZXNxAH4ABHhwdXIAE1tMamF2YS5sYW5nLk9iamVjdDuQzlifEHMpbAIAAHhwAAAA\r\nBXQAAj09dAABdnQABHR5cGV0AAZhbW91bnR0AARtZXRhdXEAfgAGAAAABXQAHm9yZy5idWtraXQu\r\naW52ZW50b3J5Lkl0ZW1TdGFja3NyABFqYXZhLmxhbmcuSW50ZWdlchLioKT3gYc4AgABSQAFdmFs\r\ndWV4cgAQamF2YS5sYW5nLk51bWJlcoaslR0LlOCLAgAAeHAAAA50dAALR09MRF9OVUdHRVRzcQB+\r\nAA8AAAACc3EAfgAAc3EAfgADdXEAfgAGAAAAA3EAfgAIdAAJbWV0YS10eXBldAAMZGlzcGxheS1u\r\nYW1ldXEAfgAGAAAAA3QACEl0ZW1NZXRhdAAKVU5TUEVDSUZJQ3QAM3siaXRhbGljIjpmYWxzZSwi\r\nY29sb3IiOiJ3aGl0ZSIsInRleHQiOiJHb2xkIENvaW4ifXNxAH4AAHNxAH4AA3VxAH4ABgAAAARx\r\nAH4ACHEAfgAJcQB+AApxAH4AC3VxAH4ABgAAAARxAH4ADnNxAH4ADwAADnR0AARCT05FcQB+ABNz\r\ncQB+AABzcQB+AAN1cQB+AAYAAAADcQB+AAhxAH4ACXEAfgAKdXEAfgAGAAAAA3EAfgAOc3EAfgAP\r\nAAAOdHQAC0pVTkdMRV9XT09Ec3EAfgAAc3EAfgADdXEAfgAGAAAAA3EAfgAIcQB+AAlxAH4ACnVx\r\nAH4ABgAAAANxAH4ADnNxAH4ADwAADnR0AApKVU5HTEVfTE9Hc3EAfgAAc3EAfgADdXEAfgAGAAAA\r\nA3EAfgAIcQB+AAlxAH4ACnVxAH4ABgAAAANxAH4ADnNxAH4ADwAADnR0ABNTVFJJUFBFRF9KVU5H\r\nTEVfTE9Hc3EAfgAAc3EAfgADdXEAfgAGAAAAA3EAfgAIcQB+AAlxAH4ACnVxAH4ABgAAAANxAH4A\r\nDnNxAH4ADwAADnR0ABRTVFJJUFBFRF9KVU5HTEVfV09PRA==\r\n"
+  },
+  "rooms": [
+    {
+      "pos1": "world:empty, x:112.7, y:50, z:-813",
+      "pos2": "world:empty, x:104.4, y:60, z:-807",
+      "playerWarpLocation": "world:empty, x:112.7, y:50, z:-810.8, yaw:90, pitch:0.9",
+      "rewardLocation": "world:empty, x: 101.5, y:50, z:-808.3, yaw:179.3, pitch:4.1"
+    }
+  ]
+}
