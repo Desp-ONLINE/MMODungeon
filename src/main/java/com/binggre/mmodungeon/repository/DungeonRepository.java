@@ -48,10 +48,8 @@ public class DungeonRepository {
     }
 
     public void updateActive(Dungeon dungeon, boolean enable) {
-        String json = FileManager.toJson(enable);
-        Document document = Document.parse(json);
         Bson filter = Filters.eq("id", dungeon.getId());
-        Bson update = Updates.set("enable", document);
+        Bson update = Updates.set("enable", enable);
         collection.updateOne(filter, update);
     }
 
