@@ -1,9 +1,12 @@
 package com.binggre.mmodungeon.listeners;
 
 import com.binggre.mmodungeon.MMODungeon;
+import com.binggre.mmodungeon.api.events.DungeonQuitEvent;
 import com.binggre.mmodungeon.objects.PlayerDungeon;
 import com.binggre.mmodungeon.objects.base.DungeonRoom;
 import com.binggre.mmodungeon.repository.PlayerRepository;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -17,10 +20,17 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
-        UUID uuid = event.getPlayer().getUniqueId();
+        Player player = event.getPlayer();
+        UUID uuid = player.getUniqueId();
+
         playerRepository.findAsync(uuid, playerRaid -> {
             playerRaid = playerRepository.init(playerRaid, uuid);
             playerRepository.saveFromMemory(uuid, playerRaid);
+
+            boolean update = playerRaid.updateNickname(player.getName());
+            if (update) {
+                playerRepository.saveAsync(playerRaid);
+            }
         });
     }
 
@@ -36,6 +46,10 @@ public class PlayerListener implements Listener {
 
         if (playerDungeon.isJoin()) {
             DungeonRoom joinedRoom = playerDungeon.getJoinedRoom();
+
+            DungeonQuitEvent quitEvent = new DungeonQuitEvent(event.getPlayer(), playerDungeon, joinedRoom);
+            Bukkit.getPluginManager().callEvent(quitEvent);
+
             joinedRoom.quit(playerDungeon);
         }
 

@@ -10,6 +10,7 @@ import net.Indyuce.mmocore.party.provided.Party;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,6 +19,8 @@ import java.util.UUID;
 public class PlayerDungeon {
 
     private final UUID uuid;
+    @Getter
+    private String nickname;
     // K dungeonId,
     private final Map<Integer, PlayerClearLog> clearLogs;
     private SerializedLocation prevLocation;
@@ -37,6 +40,14 @@ public class PlayerDungeon {
     public PlayerDungeon(UUID uuid) {
         this.uuid = uuid;
         this.clearLogs = new HashMap<>();
+    }
+
+    public boolean updateNickname(@NotNull String nickname) {
+        if (this.nickname == null || !this.nickname.equals(nickname)) {
+            this.nickname = nickname;
+            return true;
+        }
+        return false;
     }
 
     public Player toPlayer() {

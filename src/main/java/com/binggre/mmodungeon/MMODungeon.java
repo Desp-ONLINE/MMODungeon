@@ -2,9 +2,11 @@ package com.binggre.mmodungeon;
 
 import com.binggre.binggreapi.BinggrePlugin;
 import com.binggre.mmodungeon.commands.admin.AdminCommand;
+import com.binggre.mmodungeon.config.MainConfig;
 import com.binggre.mmodungeon.config.MessageConfig;
 import com.binggre.mmodungeon.listeners.BlockListener;
 import com.binggre.mmodungeon.listeners.EntityDeathListener;
+import com.binggre.mmodungeon.listeners.PlayerCommandListener;
 import com.binggre.mmodungeon.listeners.PlayerListener;
 import com.binggre.mmodungeon.managers.DungeonManager;
 import com.binggre.mmodungeon.managers.RaidManager;
@@ -45,7 +47,6 @@ public final class MMODungeon extends BinggrePlugin implements Listener {
 
         playerRepository = new PlayerRepository();
         dungeonRepository = new DungeonRepository();
-
         dungeonManager = new RaidManager(playerRepository, dungeonRepository);
 
         saveResource("example.json", true);
@@ -54,12 +55,14 @@ public final class MMODungeon extends BinggrePlugin implements Listener {
                 this,
                 new PlayerListener(),
                 new EntityDeathListener(),
-                new BlockListener()
+                new BlockListener(),
+                new PlayerCommandListener()
         );
 
         playerRepository.init();
         dungeonRepository.init();
         MessageConfig.getInstance().init();
+        MainConfig.getInstance().init();
     }
 
     @EventHandler
