@@ -77,6 +77,9 @@ public class Raid implements Dungeon {
     public void disable() {
         enable = false;
         rooms.forEach(dungeonRoom -> {
+            if (dungeonRoom.isActive()) {
+                return;
+            }
             ((RaidRoom) dungeonRoom).sendMessage(MessageConfig.getInstance().getDisable());
             dungeonRoom.stop(true);
         });
