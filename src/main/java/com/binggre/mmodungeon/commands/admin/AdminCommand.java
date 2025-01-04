@@ -37,7 +37,9 @@ public class AdminCommand extends BetterCommand implements TabCompleter {
                 new StartArgument(),
                 new ReloadArgument(),
                 new StopArgument(),
-                new RewardArgument()
+                new RewardArgument(),
+                new EnableArgument(),
+                new DisableArgument()
         );
     }
 
