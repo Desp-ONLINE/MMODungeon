@@ -11,8 +11,6 @@ public interface Dungeon {
 
     int getId();
 
-    boolean isEnable();
-
     String getName();
 
     DungeonType getType();
@@ -40,4 +38,10 @@ public interface Dungeon {
     List<DungeonRoom> getRooms();
 
     DungeonRoom findEmptyRoom();
+
+    boolean isEnable();
+
+    void enable();
+
+    void disable();
 }
