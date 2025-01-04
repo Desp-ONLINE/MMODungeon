@@ -13,6 +13,8 @@ import org.bson.conversions.Bson;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -31,16 +33,20 @@ public class PlayerRepository {
                 .getCollection(COLLECTION_NAME);
     }
 
-    public PlayerDungeon getFromMemory(UUID uuid) {
+    public PlayerDungeon get(UUID uuid) {
         return playerDungeons.get(uuid);
     }
 
-    public void saveFromMemory(UUID uuid, PlayerDungeon playerDungeon) {
+    public void put(UUID uuid, PlayerDungeon playerDungeon) {
         playerDungeons.put(uuid, playerDungeon);
     }
 
-    public void removeFromMemory(UUID uuid) {
+    public void remove(UUID uuid) {
         playerDungeons.remove(uuid);
+    }
+
+    public List<PlayerDungeon> getAll() {
+        return new ArrayList<>(playerDungeons.values());
     }
 
     public PlayerDungeon init(PlayerDungeon playerDungeon, UUID uuid) {
@@ -93,7 +99,7 @@ public class PlayerRepository {
             UUID uuid = onlinePlayer.getUniqueId();
             PlayerDungeon playerDungeon = find(uuid);
             playerDungeon = init(playerDungeon, uuid);
-            saveFromMemory(uuid, playerDungeon);
+            put(uuid, playerDungeon);
         }
     }
 }

@@ -18,7 +18,7 @@ public class BlockListener implements Listener {
     @EventHandler
     public void onClickBlock(PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        PlayerDungeon playerDungeon = playerRepository.getFromMemory(player.getUniqueId());
+        PlayerDungeon playerDungeon = playerRepository.get(player.getUniqueId());
         if (playerDungeon == null || !playerDungeon.isJoin()) {
             return;
         }

@@ -24,7 +24,7 @@ public class PlayerCommandListener implements Listener {
         }
         String command = event.getMessage().toLowerCase();
 
-        PlayerDungeon playerDungeon = repository.getFromMemory(player.getUniqueId());
+        PlayerDungeon playerDungeon = repository.get(player.getUniqueId());
         if (playerDungeon == null || !playerDungeon.isJoin()) {
             return;
         }

@@ -30,7 +30,7 @@ public class StopArgument implements CommandArgument {
             sender.sendMessage("§c존재하지 않는 플레이어입니다.");
             return false;
         }
-        PlayerDungeon playerDungeon = playerRepository.getFromMemory(target.getUniqueId());
+        PlayerDungeon playerDungeon = playerRepository.get(target.getUniqueId());
         DungeonRoom dungeonRoom = null;
         if (playerDungeon == null || (dungeonRoom = playerDungeon.getJoinedRoom()) == null) {
             sender.sendMessage("해당 플레이어는 진행중이지 않습니다.");

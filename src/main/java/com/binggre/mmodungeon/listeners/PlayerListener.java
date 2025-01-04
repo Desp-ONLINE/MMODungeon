@@ -25,7 +25,7 @@ public class PlayerListener implements Listener {
 
         playerRepository.findAsync(uuid, playerRaid -> {
             playerRaid = playerRepository.init(playerRaid, uuid);
-            playerRepository.saveFromMemory(uuid, playerRaid);
+            playerRepository.put(uuid, playerRaid);
 
             boolean update = playerRaid.updateNickname(player.getName());
             if (update) {
@@ -37,7 +37,7 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
         UUID uuid = event.getPlayer().getUniqueId();
-        PlayerDungeon playerDungeon = playerRepository.getFromMemory(uuid);
+        PlayerDungeon playerDungeon = playerRepository.get(uuid);
         if (playerDungeon == null) {
             return;
         }
@@ -54,6 +54,6 @@ public class PlayerListener implements Listener {
         }
 
         playerRepository.saveAsync(playerDungeon);
-        playerRepository.removeFromMemory(uuid);
+        playerRepository.remove(uuid);
     }
 }

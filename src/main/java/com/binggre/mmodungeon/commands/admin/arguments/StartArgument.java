@@ -38,7 +38,7 @@ public class StartArgument implements CommandArgument {
         if (player == null) {
             return false;
         }
-        PlayerDungeon playerDungeon = playerRepository.getFromMemory(player.getUniqueId());
+        PlayerDungeon playerDungeon = playerRepository.get(player.getUniqueId());
 
         if (playerDungeon.isJoin()) {
             player.sendMessage(MessageConfig.getInstance().getAlreadyPlay());

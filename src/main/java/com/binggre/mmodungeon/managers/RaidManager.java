@@ -151,7 +151,7 @@ public class RaidManager implements DungeonManager {
                 .map(PlayerData::getPlayer)
                 .filter(player -> {
                     UUID uuid = player.getUniqueId();
-                    PlayerDungeon playerDungeon = playerRepository.getFromMemory(uuid);
+                    PlayerDungeon playerDungeon = playerRepository.get(uuid);
                     PlayerClearLog log = playerDungeon.getClearLog(dungeon.getId());
 //                    return dungeon.getMaxJoin() <= log.getCount();
                     return log.isCooldown(String::new);
@@ -198,7 +198,7 @@ public class RaidManager implements DungeonManager {
 
         if (playerDungeon.isJoinParty()) {
             playerDungeon.getParty().getMembers().forEach(member ->
-                    playerDungeons.add(playerRepository.getFromMemory(member.getUniqueId()))
+                    playerDungeons.add(playerRepository.get(member.getUniqueId()))
             );
         } else {
             playerDungeons.add(playerDungeon);

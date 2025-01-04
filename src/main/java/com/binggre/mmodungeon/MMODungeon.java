@@ -75,5 +75,6 @@ public final class MMODungeon extends BinggrePlugin implements Listener {
 
     @Override
     public void onDisable() {
+        playerRepository.getAll().forEach(playerDungeon -> playerRepository.save(playerDungeon));
     }
 }

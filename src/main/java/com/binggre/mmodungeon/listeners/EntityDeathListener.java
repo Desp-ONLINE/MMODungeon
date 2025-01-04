@@ -22,7 +22,7 @@ public class EntityDeathListener implements Listener {
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
-        PlayerDungeon playerDungeon = playerRepository.getFromMemory(player.getUniqueId());
+        PlayerDungeon playerDungeon = playerRepository.get(player.getUniqueId());
         if (playerDungeon == null || !playerDungeon.isJoin()) {
             return;
         }
@@ -47,7 +47,7 @@ public class EntityDeathListener implements Listener {
             System.out.println("return1");
             return;
         }
-        PlayerDungeon playerDungeon = playerRepository.getFromMemory(player.getUniqueId());
+        PlayerDungeon playerDungeon = playerRepository.get(player.getUniqueId());
         if (playerDungeon == null || !playerDungeon.isJoin()) {
             System.out.println("return2");
             return;
