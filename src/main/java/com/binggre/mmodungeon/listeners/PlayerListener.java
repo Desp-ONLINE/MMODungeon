@@ -1,7 +1,7 @@
 package com.binggre.mmodungeon.listeners;
 
 import com.binggre.mmodungeon.MMODungeon;
-import com.binggre.mmodungeon.api.events.DungeonQuitEvent;
+import com.binggre.mmodungeon.api.DungeonQuitEvent;
 import com.binggre.mmodungeon.objects.PlayerDungeon;
 import com.binggre.mmodungeon.objects.base.DungeonRoom;
 import com.binggre.mmodungeon.repository.PlayerRepository;

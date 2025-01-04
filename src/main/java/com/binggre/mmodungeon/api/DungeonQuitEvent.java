@@ -1,4 +1,4 @@
-package com.binggre.mmodungeon.api.events;
+package com.binggre.mmodungeon.api;
 
 import com.binggre.mmodungeon.objects.PlayerDungeon;
 import com.binggre.mmodungeon.objects.base.DungeonRoom;

@@ -1,4 +1,4 @@
-package com.binggre.mmodungeon.api.events;
+package com.binggre.mmodungeon.api;
 
 import com.binggre.mmodungeon.objects.base.DungeonRoom;
 import lombok.Getter;
@@ -6,7 +6,7 @@ import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
 @Getter
-public class DungeonClearEvent extends DungeonEvent {
+public class DungeonFailedEvent extends DungeonEvent {
 
     private static final HandlerList handlers = new HandlerList();
 
@@ -20,10 +20,18 @@ public class DungeonClearEvent extends DungeonEvent {
         return handlers;
     }
 
+    private final FailedType failedType;
     private final DungeonRoom dungeonRoom;
 
-    public DungeonClearEvent(DungeonRoom dungeonRoom) {
+    public DungeonFailedEvent(DungeonRoom dungeonRoom, FailedType failedType) {
         super(dungeonRoom.getJoinedPlayerDungeons(), dungeonRoom.getParty());
         this.dungeonRoom = dungeonRoom;
+        this.failedType = failedType;
+    }
+
+    public enum FailedType {
+
+        QUIT, TIMEOUT, FORCE, DEATH
+
     }
 }

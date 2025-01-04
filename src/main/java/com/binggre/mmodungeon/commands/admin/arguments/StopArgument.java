@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 @ArgumentOption(
         arg = "중지",
         description = "/인던 중지 <닉네임>",
-        length = 3,
+        length = 2,
         permission = "mmodungeon.admin.stop",
         permissionMessage = "§c권한이 없습니다."
 )

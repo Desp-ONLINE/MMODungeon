@@ -2,7 +2,7 @@ package com.binggre.mmodungeon.objects.base;
 
 import com.binggre.binggreapi.functions.Callback;
 import com.binggre.mmodungeon.MMODungeon;
-import com.binggre.mmodungeon.api.events.DungeonFailedEvent;
+import com.binggre.mmodungeon.api.DungeonFailedEvent;
 import com.binggre.mmodungeon.objects.PlayerDungeon;
 import com.binggre.mmodungeon.repository.PlayerRepository;
 import io.lumine.mythic.bukkit.BukkitAPIHelper;

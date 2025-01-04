@@ -2,8 +2,8 @@ package com.binggre.mmodungeon.objects.raid;
 
 import com.binggre.binggreapi.utils.EconomyManager;
 import com.binggre.binggreapi.utils.NumberUtil;
-import com.binggre.mmodungeon.api.events.DungeonClearEvent;
-import com.binggre.mmodungeon.api.events.DungeonFailedEvent;
+import com.binggre.mmodungeon.api.DungeonClearEvent;
+import com.binggre.mmodungeon.api.DungeonFailedEvent;
 import com.binggre.mmodungeon.config.MessageConfig;
 import com.binggre.mmodungeon.gui.RewardGUI;
 import com.binggre.mmodungeon.objects.DungeonReward;

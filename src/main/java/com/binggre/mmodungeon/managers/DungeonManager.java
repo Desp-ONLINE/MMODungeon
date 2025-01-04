@@ -1,7 +1,7 @@
 package com.binggre.mmodungeon.managers;
 
 import com.binggre.mmodungeon.MMODungeon;
-import com.binggre.mmodungeon.api.events.DungeonJoinEvent;
+import com.binggre.mmodungeon.api.DungeonJoinEvent;
 import com.binggre.mmodungeon.objects.PlayerDungeon;
 import com.binggre.mmodungeon.objects.base.Dungeon;
 import com.binggre.mmodungeon.objects.base.DungeonRoom;
