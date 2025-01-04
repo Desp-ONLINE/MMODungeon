@@ -33,6 +33,7 @@ public class MainConfig {
         if (configDocument == null) {
             configDocument = new Document();
             configDocument.append("allowCommands", Set.of("dungeon"));
+            collection.insertOne(configDocument);
         }
         instance = FileManager.toObject(configDocument.toJson(), MainConfig.class);
     }
