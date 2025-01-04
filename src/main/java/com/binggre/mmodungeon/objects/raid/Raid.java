@@ -1,5 +1,7 @@
 package com.binggre.mmodungeon.objects.raid;
 
+import com.binggre.mmodungeon.MMODungeon;
+import com.binggre.mmodungeon.config.MessageConfig;
 import com.binggre.mmodungeon.objects.DungeonReward;
 import com.binggre.mmodungeon.objects.base.Dungeon;
 import com.binggre.mmodungeon.objects.base.DungeonRoom;
@@ -12,9 +14,9 @@ import java.util.List;
 public class Raid implements Dungeon {
 
     private int id;
+    private boolean enable;
     private DungeonType type;
     private String name;
-    private boolean enable;
     private int replayDay;
     private boolean onlySingle;
 
@@ -58,5 +60,26 @@ public class Raid implements Dungeon {
             break;
         }
         return emptyRoom;
+    }
+
+    @Override
+    public boolean isEnable() {
+        return enable;
+    }
+
+    @Override
+    public void enable() {
+        enable = true;
+        MMODungeon.getPlugin().getDungeonRepository().updateActive(this, true);
+    }
+
+    @Override
+    public void disable() {
+        enable = false;
+        rooms.forEach(dungeonRoom -> {
+            ((RaidRoom) dungeonRoom).sendMessage(MessageConfig.getInstance().getDisable());
+            dungeonRoom.stop(true);
+        });
+        MMODungeon.getPlugin().getDungeonRepository().updateActive(this, false);
     }
 }

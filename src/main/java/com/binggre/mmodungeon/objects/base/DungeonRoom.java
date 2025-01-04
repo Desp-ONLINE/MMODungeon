@@ -2,10 +2,11 @@ package com.binggre.mmodungeon.objects.base;
 
 import com.binggre.binggreapi.functions.Callback;
 import com.binggre.mmodungeon.MMODungeon;
+import com.binggre.mmodungeon.api.events.DungeonFailedEvent;
 import com.binggre.mmodungeon.objects.PlayerDungeon;
-import com.binggre.mmodungeon.repository.DungeonRepository;
 import com.binggre.mmodungeon.repository.PlayerRepository;
 import io.lumine.mythic.bukkit.BukkitAPIHelper;
+import net.Indyuce.mmocore.party.provided.Party;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -13,6 +14,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -21,7 +23,6 @@ public interface DungeonRoom {
     Plugin plugin = MMODungeon.getPlugin();
 
     PlayerRepository playerRepository = MMODungeon.getPlugin().getPlayerRepository();
-    DungeonRepository dungeonRepository = MMODungeon.getPlugin().getDungeonRepository();
 
     BukkitScheduler scheduler = Bukkit.getScheduler();
     BukkitAPIHelper mythicMobAPI = MMODungeon.getPlugin().getMythicMobAPI();
@@ -51,6 +52,21 @@ public interface DungeonRoom {
     void teleport(Player player);
 
     void cancelTasks();
+
+    List<PlayerDungeon> getJoinedPlayerDungeons();
+
+    @Nullable Party getParty();
+
+    default void callClearEvent() {
+
+    }
+
+    default void callFailedEvent(DungeonFailedEvent.FailedType failedType) {
+        DungeonFailedEvent failedEvent = new DungeonFailedEvent(this, failedType);
+        Bukkit.getPluginManager().callEvent(failedEvent);
+    }
+
+
 
     static Location deserializeLocation(Dungeon dungeon, String serializedLocation) {
         String[] split = serializedLocation

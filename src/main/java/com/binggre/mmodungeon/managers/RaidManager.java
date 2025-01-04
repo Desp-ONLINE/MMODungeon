@@ -44,8 +44,9 @@ public class RaidManager implements DungeonManager {
         }
 
         // 파티 관련 검증
+        Party party = null;
         if (playerDungeon.isJoinParty()) {
-            Party party = playerDungeon.getParty();
+            party = playerDungeon.getParty();
             if (!isPartyValid(player, party, dungeon, messageConfig)) {
                 return;
             }
@@ -60,6 +61,11 @@ public class RaidManager implements DungeonManager {
 
         // 플레이어 던전 객체 생성 후 방 참가
         List<PlayerDungeon> playerDungeons = preparePlayerDungeons(playerDungeon);
+
+        if (!callJoinEvent(dungeon, playerDungeons, party)) {
+            return;
+        }
+
         room.initJoin();
         room.join(playerDungeons);
     }
@@ -68,6 +74,10 @@ public class RaidManager implements DungeonManager {
     private boolean isDungeonValid(Player player, Dungeon dungeon, MessageConfig message) {
         if (dungeon == null) {
             player.sendMessage(message.getNotFoundDungeon());
+            return false;
+        }
+        if (!dungeon.isEnable()) {
+            player.sendMessage(message.getDisableJoin());
             return false;
         }
         if (dungeon.getRooms().isEmpty()) {
@@ -195,10 +205,5 @@ public class RaidManager implements DungeonManager {
         }
 
         return playerDungeons;
-    }
-
-    @Override
-    public void stop(PlayerDungeon playerDungeon, boolean reward) {
-
     }
 }

@@ -2,6 +2,8 @@ package com.binggre.mmodungeon.objects.raid;
 
 import com.binggre.binggreapi.utils.EconomyManager;
 import com.binggre.binggreapi.utils.NumberUtil;
+import com.binggre.mmodungeon.api.events.DungeonClearEvent;
+import com.binggre.mmodungeon.api.events.DungeonFailedEvent;
 import com.binggre.mmodungeon.config.MessageConfig;
 import com.binggre.mmodungeon.gui.RewardGUI;
 import com.binggre.mmodungeon.objects.DungeonReward;
@@ -13,13 +15,16 @@ import io.lumine.mythic.core.mobs.ActiveMob;
 import io.lumine.mythic.core.mobs.DespawnMode;
 import net.Indyuce.mmocore.api.player.PlayerData;
 import net.Indyuce.mmocore.experience.EXPSource;
+import net.Indyuce.mmocore.party.provided.Party;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +57,8 @@ public class RaidRoom implements DungeonRoom {
     private transient Integer time;
 
     private transient List<Player> players;
-    private transient List<PlayerDungeon> joinPlayerDungeons;
+    private transient Party party;
+    private transient List<PlayerDungeon> joinedPlayerDungeons;
     private transient List<Integer> tasks;
     private transient List<RaidCondition> conditions;
 
@@ -69,6 +75,7 @@ public class RaidRoom implements DungeonRoom {
 
     @Override
     public void initJoin() {
+        conditions = new ArrayList<>();
         conditions = ((Raid) connectedDungeon).getConditions()
                 .stream()
                 .map(condition -> {
@@ -80,7 +87,7 @@ public class RaidRoom implements DungeonRoom {
 
         rewardInventory = new RewardGUI(connectedDungeon.getReward());
         players = new ArrayList<>();
-        joinPlayerDungeons = new ArrayList<>();
+        joinedPlayerDungeons = new ArrayList<>();
         tasks = new ArrayList<>();
         rewardTime = ((Raid) connectedDungeon).getRewardTime();
         life = connectedDungeon.getLife();
@@ -99,7 +106,7 @@ public class RaidRoom implements DungeonRoom {
 
     @Override
     public void reward() {
-        joinPlayerDungeons.forEach(playerDungeon -> {
+        joinedPlayerDungeons.forEach(playerDungeon -> {
             Player player = playerDungeon.toPlayer();
             rewardExpGold(player, playerDungeon);
             player.teleport(rewardLocation);
@@ -109,13 +116,21 @@ public class RaidRoom implements DungeonRoom {
 
     @Override
     public void stop(boolean force) {
+        if (!force) {
+            DungeonClearEvent clearEvent = new DungeonClearEvent(this);
+            Bukkit.getPluginManager().callEvent(clearEvent);
+        } else {
+            DungeonFailedEvent failedEvent = new DungeonFailedEvent(this, DungeonFailedEvent.FailedType.FORCE);
+            Bukkit.getPluginManager().callEvent(failedEvent);
+        }
+
         cancelTasks();
         cleaning(pos1, pos2, o -> {
             active = false;
             clearCondition = false;
         });
 
-        for (PlayerDungeon memberDungeon : joinPlayerDungeons) {
+        for (PlayerDungeon memberDungeon : joinedPlayerDungeons) {
             memberDungeon.teleportPrevLocation();
             memberDungeon.setJoinedRoom(null);
             memberDungeon.toPlayer().closeInventory();
@@ -131,8 +146,9 @@ public class RaidRoom implements DungeonRoom {
         time = null;
         rewardInventory = null;
         players = null;
-        joinPlayerDungeons = null;
+        joinedPlayerDungeons = null;
         conditions = null;
+        party = null;
     }
 
     @Override
@@ -146,12 +162,16 @@ public class RaidRoom implements DungeonRoom {
         List<RaidSpawner> spawners = raid.getSpawners();
 
         for (PlayerDungeon playerDungeon : playerDungeons) {
+            Party party = playerDungeon.getParty();
+            if (this.party == null && playerDungeon.getParty() != null) {
+                this.party = party;
+            }
             Player player = playerDungeon.toPlayer();
             players.add(player);
             playerDungeon.setJoinedRoom(this);
             playerDungeon.setPrevLocation(player.getLocation());
             player.teleport(playerWarpLocation);
-            joinPlayerDungeons.add(playerDungeon);
+            joinedPlayerDungeons.add(playerDungeon);
         }
 
         for (RaidSpawner spawner : spawners) {
@@ -179,6 +199,7 @@ public class RaidRoom implements DungeonRoom {
         life--;
 
         if (life < 0) {
+            callFailedEvent(DungeonFailedEvent.FailedType.DEATH);
             sendMessage(MessageConfig.getInstance().getFailedLife());
             stop(false);
         }
@@ -187,10 +208,11 @@ public class RaidRoom implements DungeonRoom {
     @Override
     public void quit(PlayerDungeon playerDungeon) {
         players.remove(playerDungeon.toPlayer());
-        joinPlayerDungeons.remove(playerDungeon);
+        joinedPlayerDungeons.remove(playerDungeon);
         playerDungeon.getClearLog(connectedDungeon.getId()).increase();
 
-        if (players.isEmpty() || joinPlayerDungeons.isEmpty()) {
+        if (players.isEmpty() || joinedPlayerDungeons.isEmpty()) {
+            callFailedEvent(DungeonFailedEvent.FailedType.QUIT);
             stop(false);
         }
     }
@@ -205,12 +227,23 @@ public class RaidRoom implements DungeonRoom {
         tasks.forEach(scheduler::cancelTask);
     }
 
+    @Override
+    public List<PlayerDungeon> getJoinedPlayerDungeons() {
+        return joinedPlayerDungeons;
+    }
+
+    @Nullable
+    @Override
+    public Party getParty() {
+        return party;
+    }
+
     private void rewardExpGold(Player player, PlayerDungeon playerDungeon) {
         UUID uuid = playerDungeon.getUUID();
         PlayerData playerData = PlayerData.get(uuid);
 
         DungeonReward reward = connectedDungeon.getReward();
-        int division = joinPlayerDungeons.size();
+        int division = joinedPlayerDungeons.size();
 
         double exp = reward.getExp() / division;
         double gold = reward.getGold() / division;
@@ -225,6 +258,7 @@ public class RaidRoom implements DungeonRoom {
                 return;
             }
             if (time < 0) {
+                callFailedEvent(DungeonFailedEvent.FailedType.TIMEOUT);
                 sendMessage(MessageConfig.getInstance().getFailedTime());
                 stop(false);
             } else {
@@ -266,7 +300,6 @@ public class RaidRoom implements DungeonRoom {
         }
         ActiveMob mythicMobInstance = mythicMobAPI.getMythicMobInstance(livingEntity);
         if (mythicMobInstance == null) {
-            System.out.println("mythicMobInstance Return");
             return;
         }
         String internalName = mythicMobInstance.getType().getInternalName();
@@ -274,10 +307,7 @@ public class RaidRoom implements DungeonRoom {
 
         conditions.stream()
                 .filter(condition -> condition.getMobId().equals(internalName))
-                .forEach(raidCondition -> {
-                    raidCondition.increase();
-                    System.out.println("raidCondition.getAmount() = " + raidCondition.getAmount());
-                });
+                .forEach(RaidCondition::increase);
 
         int allCount = conditions.size();
         int clearCount = 0;
@@ -292,13 +322,12 @@ public class RaidRoom implements DungeonRoom {
 
         if (clearCount >= allCount) {
             clearCondition = true;
-            sendMessage("클리어!");
             scheduler.runTaskLater(plugin, this::reward, 50L);
         }
     }
 
-    private void sendMessage(String msg) {
-        joinPlayerDungeons.forEach(playerDungeon -> {
+    public void sendMessage(String msg) {
+        joinedPlayerDungeons.forEach(playerDungeon -> {
             playerDungeon.toPlayer().sendMessage(msg);
         });
     }
