@@ -15,7 +15,7 @@ import java.util.UUID;
 @Getter
 public class MessageConfig {
 
-    public static String COLLECTION = "MessageConfig";
+    public static String COLLECTION = "Config-Message";
     private static MessageConfig instance = null;
 
     public static MessageConfig getInstance() {

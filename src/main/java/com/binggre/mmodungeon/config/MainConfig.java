@@ -12,7 +12,7 @@ import java.util.Set;
 @Getter
 public class MainConfig {
 
-    public static String COLLECTION = "MainConfig";
+    public static String COLLECTION = "Config-Main";
     private static MainConfig instance = null;
 
     public static MainConfig getInstance() {
