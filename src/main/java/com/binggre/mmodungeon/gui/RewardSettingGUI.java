@@ -53,8 +53,9 @@ public class RewardSettingGUI implements InventoryHolder, HolderListener {
         if (!(event.getInventory().getHolder() instanceof RewardSettingGUI gui)) {
             return;
         }
-        dungeon.getReward().setItems(event.getInventory());
-        MMODungeon.getPlugin().getDungeonRepository().updateReward(dungeon);
+        DungeonReward reward = dungeon.getReward();
+        reward.setItems(event.getInventory());
+        MMODungeon.getPlugin().getDungeonRepository().update(dungeon, "reward", reward);
     }
 
     @Override

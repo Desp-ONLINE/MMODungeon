@@ -239,7 +239,7 @@ public class RaidRoom implements DungeonRoom {
     }
 
     private void rewardExpGold(Player player, PlayerDungeon playerDungeon) {
-        UUID uuid = playerDungeon.getUUID();
+        UUID uuid = playerDungeon.getId();
         PlayerData playerData = PlayerData.get(uuid);
 
         DungeonReward reward = connectedDungeon.getReward();

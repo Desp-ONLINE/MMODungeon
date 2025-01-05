@@ -15,7 +15,7 @@ public interface DungeonManager {
     void start(PlayerDungeon playerDungeon, int raidId);
 
     default void stopAll() {
-        for (Dungeon dungeon : MMODungeon.getPlugin().getDungeonRepository().getAll()) {
+        for (Dungeon dungeon : MMODungeon.getPlugin().getDungeonRepository().values()) {
             for (DungeonRoom room : dungeon.getRooms()) {
                 if (room.isActive()) {
                     room.stop(true);

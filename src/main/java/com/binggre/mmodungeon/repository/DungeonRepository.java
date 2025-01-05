@@ -7,54 +7,36 @@ import com.binggre.mmodungeon.objects.base.DungeonRoom;
 import com.binggre.mmodungeon.objects.enums.DungeonType;
 import com.binggre.mmodungeon.objects.raid.Raid;
 import com.binggre.mmodungeon.objects.raid.RaidRoom;
-import com.binggre.mongolibraryplugin.MongoLibraryPlugin;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.model.Filters;
-import com.mongodb.client.model.Updates;
+import com.binggre.mongolibraryplugin.base.MongoCachedRepository;
 import org.bson.Document;
-import org.bson.conversions.Bson;
+import org.bukkit.plugin.Plugin;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
-public class DungeonRepository {
+public class DungeonRepository extends MongoCachedRepository<Integer, Dungeon> {
 
-    public static final String COLLECTION_NAME = "Dungeon";
-    private final MongoCollection<Document> collection;
-
-    private final Map<Integer, Dungeon> dungeons = new HashMap<>();
-
-    public DungeonRepository() {
-        collection = MongoLibraryPlugin.getInst().getMongoClient()
-                .getDatabase(MMODungeon.DATA_BASE_NAME)
-                .getCollection(COLLECTION_NAME);
+    public DungeonRepository(Plugin plugin, String database, String collection, Map<Integer, Dungeon> cache) {
+        super(plugin, database, collection, cache);
     }
 
-    public Dungeon get(int id) {
-        return dungeons.get(id);
+    @Override
+    public Document toDocument(Dungeon dungeon) {
+        String json = FileManager.toJson(dungeon);
+        return Document.parse(json);
     }
 
-    public List<Dungeon> getAll() {
-        return dungeons.values().stream().toList();
-    }
-
-    public void updateReward(Dungeon dungeon) {
-        String json = FileManager.toJson(dungeon.getReward());
-        Document document = Document.parse(json);
-        Bson filter = Filters.eq("id", dungeon.getId());
-        Bson update = Updates.set("reward", document);
-        collection.updateOne(filter, update);
-    }
-
-    public void updateActive(Dungeon dungeon, boolean enable) {
-        Bson filter = Filters.eq("id", dungeon.getId());
-        Bson update = Updates.set("enable", enable);
-        collection.updateOne(filter, update);
+    @Override
+    public Dungeon toEntity(Document document) {
+        return FileManager.toObject(document.toJson(), Dungeon.class);
     }
 
     public void init() {
-        dungeons.clear();
+        cache.clear();
 
         collection.find().forEach(document -> {
             String type = document.getString("type");
@@ -80,7 +62,7 @@ public class DungeonRepository {
 
             if (dungeon != null) {
                 dungeon.init(rooms);
-                dungeons.put(dungeon.getId(), dungeon);
+                putIn(dungeon);
             }
         });
     }

@@ -2,14 +2,13 @@ package com.binggre.mmodungeon.objects.base;
 
 import com.binggre.mmodungeon.objects.DungeonReward;
 import com.binggre.mmodungeon.objects.enums.DungeonType;
+import com.binggre.mongolibraryplugin.base.MongoData;
 
 import java.util.List;
 
-public interface Dungeon {
+public interface Dungeon extends MongoData<Integer> {
 
     void init(List<DungeonRoom> rooms);
-
-    int getId();
 
     String getName();
 

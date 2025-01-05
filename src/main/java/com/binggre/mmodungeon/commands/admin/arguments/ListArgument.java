@@ -29,7 +29,7 @@ public class ListArgument implements CommandArgument {
             return false;
         }
         DungeonRepository dungeonRepository = MMODungeon.getPlugin().getDungeonRepository();
-        List<Dungeon> list = dungeonRepository.getAll()
+        List<Dungeon> list = dungeonRepository.values()
                 .stream()
                 .filter(dungeon -> dungeon.getType() == type)
                 .toList();
@@ -41,7 +41,7 @@ public class ListArgument implements CommandArgument {
 
         sender.sendMessage("[" + type.getName() + "]");
         int index = 1;
-        for (Dungeon raid : dungeonRepository.getAll()) {
+        for (Dungeon raid : dungeonRepository.values()) {
             String format = String.format("%s. ID<%s> %s", index, raid.getId(), raid.getName());
             sender.sendMessage(format);
             index++;

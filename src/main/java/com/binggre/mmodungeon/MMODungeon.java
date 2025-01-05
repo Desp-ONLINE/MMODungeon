@@ -20,6 +20,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.PluginDisableEvent;
 
+import java.util.HashMap;
+
 @Getter
 public final class MMODungeon extends BinggrePlugin implements Listener {
 
@@ -45,8 +47,8 @@ public final class MMODungeon extends BinggrePlugin implements Listener {
         mmoCoreAPI = new MMOCoreAPI(this);
         mythicMobAPI = new BukkitAPIHelper();
 
-        playerRepository = new PlayerRepository();
-        dungeonRepository = new DungeonRepository();
+        playerRepository = new PlayerRepository(this, DATA_BASE_NAME, "Player", new HashMap<>());
+        dungeonRepository = new DungeonRepository(this, DATA_BASE_NAME, "Dungeon", new HashMap<>());
         dungeonManager = new RaidManager(playerRepository, dungeonRepository);
 
         saveResource("example.json", true);
@@ -75,6 +77,6 @@ public final class MMODungeon extends BinggrePlugin implements Listener {
 
     @Override
     public void onDisable() {
-        playerRepository.getAll().forEach(playerDungeon -> playerRepository.save(playerDungeon));
+        playerRepository.values().forEach(playerDungeon -> playerRepository.save(playerDungeon));
     }
 }

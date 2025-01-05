@@ -2,6 +2,7 @@ package com.binggre.mmodungeon.objects;
 
 import com.binggre.mmodungeon.MMODungeon;
 import com.binggre.mmodungeon.objects.base.DungeonRoom;
+import com.binggre.mongolibraryplugin.base.MongoData;
 import lombok.Getter;
 import lombok.Setter;
 import net.Indyuce.mmocore.api.player.PlayerData;
@@ -16,9 +17,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class PlayerDungeon {
+public class PlayerDungeon implements MongoData<UUID> {
 
-    private final UUID uuid;
+    @Getter
+    private final UUID id;
     @Getter
     private String nickname;
     // K dungeonId,
@@ -29,16 +31,12 @@ public class PlayerDungeon {
     @Setter
     private transient DungeonRoom joinedRoom;
 
-    public UUID getUUID() {
-        return uuid;
-    }
-
     public boolean isJoin() {
         return joinedRoom != null;
     }
 
-    public PlayerDungeon(UUID uuid) {
-        this.uuid = uuid;
+    public PlayerDungeon(UUID id) {
+        this.id = id;
         this.clearLogs = new HashMap<>();
     }
 
@@ -51,7 +49,7 @@ public class PlayerDungeon {
     }
 
     public Player toPlayer() {
-        Player player = Bukkit.getPlayer(uuid);
+        Player player = Bukkit.getPlayer(id);
         if (player == null) {
             throw new IllegalStateException("Player is not online");
         }
@@ -75,13 +73,13 @@ public class PlayerDungeon {
     }
 
     public boolean isJoinParty() {
-        PlayerData playerData = PlayerData.get(uuid);
+        PlayerData playerData = PlayerData.get(id);
         AbstractParty party = MMODungeon.getPlugin().getMmoCore().partyModule.getParty(playerData);
         return party != null;
     }
 
     public Party getParty() {
-        PlayerData playerData = PlayerData.get(uuid);
+        PlayerData playerData = PlayerData.get(id);
         return (Party) MMODungeon.getPlugin().getMmoCore().partyModule.getParty(playerData);
     }
 

@@ -41,6 +41,11 @@ public class Raid implements Dungeon {
     private transient List<DungeonRoom> rooms;
 
     @Override
+    public Integer getId() {
+        return id;
+    }
+
+    @Override
     public void init(List<DungeonRoom> rooms) {
         this.rooms = rooms;
         this.rewardBlock = rewardBlock.replace(" ", "_").toUpperCase();
@@ -70,7 +75,7 @@ public class Raid implements Dungeon {
     @Override
     public void enable() {
         enable = true;
-        MMODungeon.getPlugin().getDungeonRepository().updateActive(this, true);
+        MMODungeon.getPlugin().getDungeonRepository().update(this, "enable", true);
     }
 
     @Override
@@ -83,6 +88,6 @@ public class Raid implements Dungeon {
             ((RaidRoom) dungeonRoom).sendMessage(MessageConfig.getInstance().getDisable());
             dungeonRoom.stop(true);
         });
-        MMODungeon.getPlugin().getDungeonRepository().updateActive(this, false);
+        MMODungeon.getPlugin().getDungeonRepository().update(this, "enable", false);
     }
 }

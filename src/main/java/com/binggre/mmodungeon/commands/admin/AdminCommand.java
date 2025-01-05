@@ -66,7 +66,7 @@ public class AdminCommand extends BetterCommand implements TabCompleter {
     }
 
     private List<String> getDungeonIdList() {
-        return repository.getAll().stream()
+        return repository.values().stream()
                 .map(dungeon -> String.valueOf(dungeon.getId()))
                 .toList();
     }
