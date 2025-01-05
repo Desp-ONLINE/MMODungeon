@@ -2,10 +2,11 @@ package com.binggre.mmodungeon.objects;
 
 import com.binggre.binggreapi.utils.file.FileManager;
 import com.binggre.binggreapi.utils.serializers.ItemStackSerializer;
-import com.binggre.mongolibraryplugin.base.MongoObject;
+import com.binggre.mongolibraryplugin.base.MongoUpdatable;
 import com.google.gson.annotations.SerializedName;
 import lombok.AccessLevel;
 import lombok.Getter;
+import org.bson.Document;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-public class DungeonReward implements MongoObject {
+public class DungeonReward implements MongoUpdatable {
 
     private double exp;
     private double gold;
@@ -25,8 +26,9 @@ public class DungeonReward implements MongoObject {
     private transient List<ItemStack> itemStacks;
 
     @Override
-    public String toJson() {
-        return FileManager.toJson(this);
+    public Document toDocument() {
+        String json = FileManager.toJson(this);
+        return Document.parse(json);
     }
 
     public void setItems(Inventory inventory) {
