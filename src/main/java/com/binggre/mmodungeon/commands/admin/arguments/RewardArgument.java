@@ -1,7 +1,6 @@
 package com.binggre.mmodungeon.commands.admin.arguments;
 
 import com.binggre.binggreapi.command.CommandArgument;
-import com.binggre.binggreapi.command.annotations.ArgumentOption;
 import com.binggre.binggreapi.utils.NumberUtil;
 import com.binggre.mmodungeon.MMODungeon;
 import com.binggre.mmodungeon.gui.RewardSettingGUI;
@@ -12,14 +11,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-@ArgumentOption(
-        arg = "보상설정",
-        description = "/인던 보상설정 [ID]",
-        length = 2,
-        permission = "mmodungeon.admin.reward",
-        permissionMessage = "§c권한이 없습니다.",
-        onlyPlayer = true
-)
 public class RewardArgument implements CommandArgument {
 
     private final DungeonRepository dungeonRepository = MMODungeon.getPlugin().getDungeonRepository();
@@ -38,6 +29,36 @@ public class RewardArgument implements CommandArgument {
             return false;
         }
         RewardSettingGUI.open((Player) sender, dungeon);
+        return true;
+    }
+
+    @Override
+    public String getArg() {
+        return "리로드";
+    }
+
+    @Override
+    public int length() {
+        return 0;
+    }
+
+    @Override
+    public String getDescription() {
+        return "[ID]";
+    }
+
+    @Override
+    public String getPermission() {
+        return "mmodungeon.admin.reward";
+    }
+
+    @Override
+    public String getPermissionMessage() {
+        return "§c권한이 없습니다.";
+    }
+
+    @Override
+    public boolean onlyPlayer() {
         return true;
     }
 }

@@ -1,7 +1,6 @@
 package com.binggre.mmodungeon.commands.admin.arguments;
 
 import com.binggre.binggreapi.command.CommandArgument;
-import com.binggre.binggreapi.command.annotations.ArgumentOption;
 import com.binggre.mmodungeon.MMODungeon;
 import com.binggre.mmodungeon.objects.base.Dungeon;
 import com.binggre.mmodungeon.objects.enums.DungeonType;
@@ -12,13 +11,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-@ArgumentOption(
-        arg = "목록",
-        description = "/인던 목록 <던전타입> - 던전 목록을 확인합니다.",
-        length = 2,
-        permission = "mmodungeon.admin.list",
-        permissionMessage = "§c권한이 없습니다."
-)
 public class ListArgument implements CommandArgument {
 
     @Override
@@ -47,5 +39,35 @@ public class ListArgument implements CommandArgument {
             index++;
         }
         return true;
+    }
+
+    @Override
+    public String getArg() {
+        return "목록";
+    }
+
+    @Override
+    public int length() {
+        return 2;
+    }
+
+    @Override
+    public String getDescription() {
+        return "- 던전 목록을 확인합니다.";
+    }
+
+    @Override
+    public String getPermission() {
+        return "mmodungeon.admin.list";
+    }
+
+    @Override
+    public String getPermissionMessage() {
+        return "§c권한이 없습니다.";
+    }
+
+    @Override
+    public boolean onlyPlayer() {
+        return false;
     }
 }

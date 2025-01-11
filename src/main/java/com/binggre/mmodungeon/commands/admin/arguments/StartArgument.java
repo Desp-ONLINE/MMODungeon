@@ -1,7 +1,6 @@
 package com.binggre.mmodungeon.commands.admin.arguments;
 
 import com.binggre.binggreapi.command.CommandArgument;
-import com.binggre.binggreapi.command.annotations.ArgumentOption;
 import com.binggre.binggreapi.utils.NumberUtil;
 import com.binggre.mmodungeon.MMODungeon;
 import com.binggre.mmodungeon.config.MessageConfig;
@@ -14,13 +13,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-@ArgumentOption(
-        arg = "시작",
-        description = "/인던 시작 <닉네임> <ID>",
-        length = 3,
-        permission = "mmodungeon.admin.list",
-        permissionMessage = "§c권한이 없습니다."
-)
 public class StartArgument implements CommandArgument {
 
     private final PlayerRepository playerRepository = MMODungeon.getPlugin().getPlayerRepository();
@@ -47,5 +39,35 @@ public class StartArgument implements CommandArgument {
 
         dungeonManager.start(playerDungeon, id);
         return true;
+    }
+
+    @Override
+    public String getArg() {
+        return "시작";
+    }
+
+    @Override
+    public int length() {
+        return 3;
+    }
+
+    @Override
+    public String getDescription() {
+        return "[닉네임] [ID]";
+    }
+
+    @Override
+    public String getPermission() {
+        return "mmodungeon.admin.start";
+    }
+
+    @Override
+    public String getPermissionMessage() {
+        return "§c권한이 없습니다.";
+    }
+
+    @Override
+    public boolean onlyPlayer() {
+        return false;
     }
 }

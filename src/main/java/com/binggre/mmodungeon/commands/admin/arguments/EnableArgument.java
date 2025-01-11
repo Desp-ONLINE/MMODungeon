@@ -1,7 +1,6 @@
 package com.binggre.mmodungeon.commands.admin.arguments;
 
 import com.binggre.binggreapi.command.CommandArgument;
-import com.binggre.binggreapi.command.annotations.ArgumentOption;
 import com.binggre.binggreapi.utils.NumberUtil;
 import com.binggre.mmodungeon.MMODungeon;
 import com.binggre.mmodungeon.objects.base.Dungeon;
@@ -10,14 +9,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
-
-@ArgumentOption(
-        arg = "활성화",
-        description = "/인던 활성화 <ID>",
-        length = 2,
-        permission = "mmodungeon.admin.enable",
-        permissionMessage = "§c권한이 없습니다."
-)
 public class EnableArgument implements CommandArgument {
 
     private final DungeonRepository dungeonRepository = MMODungeon.getPlugin().getDungeonRepository();
@@ -39,5 +30,35 @@ public class EnableArgument implements CommandArgument {
         dungeon.enable();
         sender.sendMessage(id + " 던전을 활성화했습니다.");
         return true;
+    }
+
+    @Override
+    public String getArg() {
+        return "활성화";
+    }
+
+    @Override
+    public int length() {
+        return 2;
+    }
+
+    @Override
+    public String getDescription() {
+        return "[ID]";
+    }
+
+    @Override
+    public String getPermission() {
+        return "mmodungeon.admin.enable";
+    }
+
+    @Override
+    public String getPermissionMessage() {
+        return "§c권한이 없습니다.";
+    }
+
+    @Override
+    public boolean onlyPlayer() {
+        return false;
     }
 }
